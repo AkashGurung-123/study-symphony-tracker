@@ -42,7 +42,7 @@ export default function Progress() {
   });
   
   // Generate trend data starting from April 1st
-  const startDate = new Date(2024, 3, 1); // April 1st, 2024 (months are 0-based in JavaScript)
+  const startDate = new Date(2024, 2, 12); // March 12, 2024 (months are 0-based in JavaScript)
   const today = new Date();
   
   // Calculate how many days have passed since April 1st
