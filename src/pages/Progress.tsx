@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Layout } from '@/components/Layout';
 import { ProgressChart } from '@/components/ProgressChart';
@@ -42,18 +41,38 @@ export default function Progress() {
     };
   });
   
-  // Generate dummy trend data
+  // Generate trend data starting from April 1st
+  const startDate = new Date(2024, 3, 1); // April 1st, 2024 (months are 0-based in JavaScript)
   const today = new Date();
-  const trendData = Array.from({ length: 14 }, (_, i) => {
-    const day = new Date(today);
-    day.setDate(day.getDate() - (13 - i));
+  
+  // Calculate how many days have passed since April 1st
+  const daysSinceStart = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+  const totalDays = 14; // We'll show 14 days of data
+  
+  const trendData = Array.from({ length: totalDays }, (_, i) => {
+    // If i is beyond the days since start, we're projecting future progress
+    const isProjection = i > daysSinceStart;
+    
+    // Calculate the date
+    const day = new Date(startDate);
+    day.setDate(startDate.getDate() + i);
+    
+    // Calculate the progress for this date
+    let progress;
+    if (isProjection) {
+      // For projected days, extrapolate from current progress towards the target
+      const daysRemaining = totalDays - daysSinceStart;
+      const progressIncrement = (90 - progressPercentage) / Math.max(1, daysRemaining);
+      progress = Math.min(90, Math.round(progressPercentage + (i - daysSinceStart) * progressIncrement));
+    } else {
+      // For past days, simulate incremental progress
+      progress = Math.round(progressPercentage * (i / Math.max(1, daysSinceStart)));
+    }
     
     return {
       date: format(day, 'MMM d'),
-      progress: i === 13 
-        ? Math.round(progressPercentage) 
-        : Math.max(0, Math.round(progressPercentage) - Math.round((13 - i) * (progressPercentage / 14))),
-      target: Math.round((i + 1) * (90 / 14))
+      progress: progress,
+      target: Math.round((i + 1) * (90 / totalDays))
     };
   });
   
@@ -106,7 +125,7 @@ export default function Progress() {
           <div className="glass rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-6 flex items-center">
               <TrendingUp size={20} className="mr-2 text-primary" />
-              Progress Trend
+              Progress Trend (Since April 1st)
             </h2>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
