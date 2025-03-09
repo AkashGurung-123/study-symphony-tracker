@@ -5,7 +5,7 @@ import { Course, Topic, DailySchedule, StudySession, BreakActivity, courses } fr
 const STUDY_HOURS_PER_DAY = 8; // Target hours to study each day
 const BREAK_TIME_PER_STUDY_HOUR = 15; // Minutes of break per hour of study
 const COOKING_TIME_PER_DAY = 60; // Minutes spent cooking per day
-const WEEKS_UNTIL_EXAM = 12; // 3 months = ~12 weeks
+const EXAM_DATE = new Date(2024, 5, 1); // June 1, 2024 (months are 0-based in JavaScript)
 
 // Generate a unique ID
 const generateId = (): string => {
@@ -151,6 +151,13 @@ export const getEstimatedCompletionDate = (): Date => {
   return completionDate;
 };
 
+// Calculate days until exam
+export const getDaysUntilExam = (): number => {
+  const today = new Date();
+  const timeDiff = EXAM_DATE.getTime() - today.getTime();
+  return Math.ceil(timeDiff / (1000 * 3600 * 24));
+};
+
 // Get projected score based on current progress
 export const getProjectedScore = (): number => {
   const totalCreditHours = courses.reduce((total, course) => {
@@ -166,9 +173,15 @@ export const getProjectedScore = (): number => {
   }, 0);
   
   const progressPercent = completedCreditHours / totalCreditHours;
-  const daysUntilExam = WEEKS_UNTIL_EXAM * 7;
-  const expectedDailyProgress = totalCreditHours / (WEEKS_UNTIL_EXAM * 7) / STUDY_HOURS_PER_DAY;
-  const currentDailyProgress = completedCreditHours / (WEEKS_UNTIL_EXAM * 7 - daysUntilExam) / STUDY_HOURS_PER_DAY;
+  const daysUntilExam = getDaysUntilExam();
+  const expectedDailyProgress = totalCreditHours / daysUntilExam / STUDY_HOURS_PER_DAY;
+  
+  // Calculate how many days have passed since starting
+  const today = new Date();
+  const daysPassed = Math.ceil((today.getTime() - new Date(today.getFullYear(), today.getMonth() - 1, today.getDate()).getTime()) / (1000 * 3600 * 24));
+  
+  // Avoid division by zero
+  const currentDailyProgress = daysPassed > 0 ? completedCreditHours / daysPassed / STUDY_HOURS_PER_DAY : 0;
   
   // Score projection based on current progress rate compared to expected rate
   let projectedScore = 90;

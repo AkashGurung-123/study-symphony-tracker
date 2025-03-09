@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { format } from 'date-fns';
 import { Book, Coffee, Clock } from 'lucide-react';
 import { DailySchedule } from '@/lib/data';
-import { generateDailyStudySessions } from '@/lib/studyPlanGenerator';
+import { generateDailyStudySessions, getDaysUntilExam } from '@/lib/studyPlanGenerator';
 import { cn } from '@/lib/utils';
 
 interface StudyPlanProps {
@@ -13,6 +12,7 @@ interface StudyPlanProps {
 
 export function StudyPlan({ date = new Date(), className }: StudyPlanProps) {
   const [schedule, setSchedule] = React.useState<DailySchedule | null>(null);
+  const daysUntilExam = getDaysUntilExam();
   
   React.useEffect(() => {
     const dailySchedule = generateDailyStudySessions(date);
@@ -41,6 +41,9 @@ export function StudyPlan({ date = new Date(), className }: StudyPlanProps) {
     <div className={cn("p-6 glass rounded-xl", className)}>
       <h3 className="text-lg font-semibold mb-4">
         {format(date, 'EEEE, MMMM d')}
+        <span className="ml-2 text-sm text-muted-foreground">
+          {daysUntilExam} days until exam
+        </span>
       </h3>
       
       <div className="space-y-4">
