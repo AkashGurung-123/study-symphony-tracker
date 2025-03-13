@@ -2,12 +2,33 @@
 import React from 'react';
 import { type Course } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { Atom, BookOpen, Code, BrainCircuit, FlaskConical, Laptop } from 'lucide-react';
 
 interface CourseCardProps {
   course: Course;
   onClick?: () => void;
   className?: string;
 }
+
+// Helper function to get the appropriate icon for each course
+const getCourseIcon = (courseId: string) => {
+  switch (courseId) {
+    case 'econophysics':
+      return <FlaskConical className="text-primary/80" size={24} />;
+    case 'quantum-mechanics':
+      return <Atom className="text-primary/80" size={24} />;
+    case 'nuclear-physics':
+      return <Atom className="text-primary/80" size={24} />;
+    case 'solid-state-physics':
+      return <BrainCircuit className="text-primary/80" size={24} />;
+    case 'project-work':
+      return <BookOpen className="text-primary/80" size={24} />;
+    case 'computational-course':
+      return <Laptop className="text-primary/80" size={24} />;
+    default:
+      return <BookOpen className="text-primary/80" size={24} />;
+  }
+};
 
 export function CourseCard({ course, onClick, className }: CourseCardProps) {
   // Calculate completion percentage
@@ -34,7 +55,10 @@ export function CourseCard({ course, onClick, className }: CourseCardProps) {
       <div className="relative z-10">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="font-semibold text-lg">{course.name}</h3>
+            <div className="flex items-center gap-2 mb-1">
+              {getCourseIcon(course.id)}
+              <h3 className="font-semibold text-lg">{course.name}</h3>
+            </div>
             <p className="text-sm text-muted-foreground">{course.code}</p>
           </div>
           <div className="text-center px-3 py-1 bg-primary/10 backdrop-blur rounded-lg border border-primary/20">
