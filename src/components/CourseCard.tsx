@@ -2,7 +2,7 @@
 import React from 'react';
 import { type Course } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { Atom, BookOpen, Code, BrainCircuit, FlaskConical, Laptop } from 'lucide-react';
+import { Atom, BookOpen, Code, BrainCircuit, FlaskConical, Laptop, DollarSign } from 'lucide-react';
 
 interface CourseCardProps {
   course: Course;
@@ -14,7 +14,7 @@ interface CourseCardProps {
 const getCourseIcon = (courseId: string) => {
   switch (courseId) {
     case 'econophysics':
-      return <FlaskConical className="text-primary/80" size={24} />;
+      return <DollarSign className="text-primary/80" size={24} />;
     case 'quantum-mechanics':
       return <Atom className="text-primary/80" size={24} />;
     case 'nuclear-physics':
