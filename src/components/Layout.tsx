@@ -8,7 +8,8 @@ import {
   LineChart, 
   Settings,
   Menu,
-  X
+  X,
+  Atom
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -44,7 +45,10 @@ export function Layout({ children }: LayoutProps) {
           >
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <h1 className="text-2xl font-semibold tracking-tight">Study Symphony</h1>
+          <div className="flex items-center">
+            <Atom size={28} className="text-primary mr-2 animate-pulse" />
+            <h1 className="text-2xl font-semibold tracking-tight">Study Symphony</h1>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
@@ -63,6 +67,10 @@ export function Layout({ children }: LayoutProps) {
           )}
         >
           <div className="flex flex-col h-full pt-20 md:pt-8 px-4">
+            <div className="flex items-center px-3 py-4 mb-6">
+              <Atom size={24} className="text-primary mr-2" />
+              <h2 className="text-xl font-semibold">Study Symphony</h2>
+            </div>
             <nav className="space-y-1 flex-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
