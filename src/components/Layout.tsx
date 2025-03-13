@@ -11,6 +11,7 @@ import {
   X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -46,6 +47,7 @@ export function Layout({ children }: LayoutProps) {
           <h1 className="text-2xl font-semibold tracking-tight">Study Symphony</h1>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button className="p-2 rounded-full hover:bg-secondary transition-colors">
             <Settings size={20} />
           </button>
